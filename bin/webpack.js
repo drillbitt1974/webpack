@@ -219,36 +219,45 @@ function processOptions(options) {
 			outputOptions.cachedAssets = false;
 
 		ifArg("display-chunks", function(bool) {
-			outputOptions.modules = !bool;
-			outputOptions.chunks = bool;
+			if(bool) {
+				outputOptions.modules = false;
+				outputOptions.chunks = true;
+			}
 		});
 
 		ifArg("display-entrypoints", function(bool) {
-			outputOptions.entrypoints = bool;
+			if(bool)
+				outputOptions.entrypoints = true;
 		});
 
 		ifArg("display-reasons", function(bool) {
-			outputOptions.reasons = bool;
+			if(bool)
+				outputOptions.reasons = true;
 		});
 
 		ifArg("display-depth", function(bool) {
-			outputOptions.depth = bool;
+			if(bool)
+				outputOptions.depth = true;
 		});
 
 		ifArg("display-used-exports", function(bool) {
-			outputOptions.usedExports = bool;
+			if(bool)
+				outputOptions.usedExports = true;
 		});
 
 		ifArg("display-provided-exports", function(bool) {
-			outputOptions.providedExports = bool;
+			if(bool)
+				outputOptions.providedExports = true;
 		});
 
 		ifArg("display-error-details", function(bool) {
-			outputOptions.errorDetails = bool;
+			if(bool)
+				outputOptions.errorDetails = true;
 		});
 
 		ifArg("display-origins", function(bool) {
-			outputOptions.chunkOrigins = bool;
+			if(bool)
+				outputOptions.chunkOrigins = true;
 		});
 
 		ifArg("display-max-modules", function(value) {
@@ -337,7 +346,9 @@ function processOptions(options) {
 			process.stdout.write(JSON.stringify(stats.toJson(outputOptions), null, 2) + "\n");
 		} else if(stats.hash !== lastHash) {
 			lastHash = stats.hash;
-			process.stdout.write(stats.toString(outputOptions) + "\n");
+			var statsString = stats.toString(outputOptions);
+			if(statsString)
+				process.stdout.write(statsString + "\n");
 		}
 		if(!options.watch && stats.hasErrors()) {
 			process.on("exit", function() {
